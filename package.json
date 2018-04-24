@@ -1,5 +1,5 @@
 {
-  "name": "bip39",
+  "name": "bip39-ts",
   "version": "0.0.1",
   "description": "bip39 implementation by TypeScript for Node.js",
   "main": "index.js",
