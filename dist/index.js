@@ -13,14 +13,14 @@ const language = {
     zh_TW: "zh_TW",
 };
 exports.language = language;
-const zh_CN = require("./wordlist/chinese_simplified.json");
-const zh_TW = require("./wordlist/chinese_traditional.json");
-const english = require("./wordlist/english.json");
-const french = require("./wordlist/french.json");
-const italian = require("./wordlist/italian.json");
-const japanese = require("./wordlist/japanese.json");
-const korean = require("./wordlist/korean.json");
-const spanish = require("./wordlist/spanish.json");
+const zh_CN = require("../wordlist/chinese_simplified.json");
+const zh_TW = require("../wordlist/chinese_traditional.json");
+const english = require("../wordlist/english.json");
+const french = require("../wordlist/french.json");
+const italian = require("../wordlist/italian.json");
+const japanese = require("../wordlist/japanese.json");
+const korean = require("../wordlist/korean.json");
+const spanish = require("../wordlist/spanish.json");
 const wordList = {
     english,
     french,

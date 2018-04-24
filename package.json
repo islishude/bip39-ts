@@ -1,6 +1,6 @@
 {
   "name": "bip39",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "bip39 implementation by TypeScript for Node.js",
   "main": "index.js",
   "types": "types/index.d.st",
@@ -13,11 +13,10 @@
     "typescript": "^2.8.3"
   },
   "scripts": {
-    "build": "tsc",
-    "wordlist": "npm run wordlist:src && npm run wordlist:dist",
-    "wordlist:src": "cd src/wordlist && ts-node update.ts",
-    "wordlist:dist": "npm run build && cd dist/wordlist && node update.js",
-    "lint": "eslint src/**/*"
+    "build": "rm -rf dist types && tsc",
+    "wordlist": "cd wordlist && ts-node update.ts",
+    "lint": "tslint src/**/*",
+    "test": "npm run lint && ts-node src/test/*"
   },
   "repository": {
     "type": "git",
