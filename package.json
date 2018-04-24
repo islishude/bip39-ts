@@ -1,6 +1,6 @@
 {
   "name": "bip39-ts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "bip39 implementation by TypeScript for Node.js",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
