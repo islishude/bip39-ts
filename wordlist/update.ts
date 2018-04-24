@@ -1,4 +1,4 @@
-import axios, { AxiosPromise } from "axios";
+import axios from "axios";
 import { writeFile } from "fs";
 import { promisify } from "util";
 const write = promisify(writeFile);
@@ -39,4 +39,4 @@ async function getWordsList() {
 }
 
 /* tslint:disable */
-getWordsList().catch((err) => console.log(err.message));
+getWordsList().catch(err => console.log(err.message));

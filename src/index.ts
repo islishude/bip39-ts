@@ -1,5 +1,4 @@
 import { pbkdf2Sync } from "crypto";
-// import { TextEncoder } from "util";
 import { createHash, randomBytes } from "crypto";
 
 const language = {
@@ -83,15 +82,13 @@ const getMnemonic = (
 ): string => {
   const m = mnemonicLength[len];
   const entropy: Buffer = randomBytes(m.ent);
-  const checksumLen: number = m.cs;
-  const words: string[] = wordList[lang] as string[];
+  const words: string[] = wordList[lang];
   const checksum: Buffer = createHash("sha256")
     .update(entropy)
     .digest()
     .slice(0, 1);
-  const seed = Buffer.concat([entropy, checksum]);
 
-  const seedString: string = Array.from(seed)
+  const seed: string = Array.from(Buffer.concat([entropy, checksum]))
     .map((v) => {
       let tmp = v.toString(2);
       if (tmp.length < 8) {
@@ -104,7 +101,7 @@ const getMnemonic = (
     .join("")
     .slice(0, m.ent + m.cs);
 
-  const seedGroup = seedString.match(/(.{11})/g);
+  const seedGroup = seed.match(/(.{11})/g);
   const res: string[] = [];
 
   for (const wordIndex of seedGroup) {
@@ -117,7 +114,6 @@ const getMnemonic = (
 
 const toUtf8 = (data: string): Buffer => {
   const nor: string = data.normalize("NFKD");
-  //   const enc: ArrayBuffer = u8.encode(nor).buffer;
   return Buffer.from(nor, "utf8");
 };
 
