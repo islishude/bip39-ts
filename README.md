@@ -1,2 +1,1 @@
-# bip39
-bip39 implentation by TypeScript for Node.js
+bip39 implementation by TypeScript for Node.js
