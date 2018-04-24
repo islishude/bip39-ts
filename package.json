@@ -2,8 +2,8 @@
   "name": "bip39-ts",
   "version": "0.0.1",
   "description": "bip39 implementation by TypeScript for Node.js",
-  "main": "index.js",
-  "types": "types/index.d.st",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^9.6.6",
@@ -16,7 +16,8 @@
     "build": "rm -rf dist types && tsc",
     "wordlist": "cd wordlist && ts-node update.ts",
     "lint": "tslint src/**/*",
-    "test": "npm run lint && ts-node src/test/*"
+    "test": "npm run lint && ts-node src/test/*",
+    "pub": "git push --all && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,7 @@
   },
   "keywords": [],
   "author": "lishude <lishude@aliyun.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/cryptocoin-ts/bip39/issues"
   },
