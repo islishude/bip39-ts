@@ -1,16 +1,14 @@
 import { pbkdf2Sync } from "crypto";
 import { createHash, randomBytes } from "crypto";
-
-const language = {
-  english: "english",
-  french: "french",
-  italian: "italian",
-  japanese: "japanese",
-  korean: "korean",
-  spanish: "spanish",
-  zh_CN: "zh_CN",
-  zh_TW: "zh_TW",
-};
+import {
+  bufToBinary,
+  getCheckSum,
+  padding,
+  pbkdf2,
+  sha256,
+  toUtf8
+} from "./helper";
+import { language, mnemonicLength, wordList } from "./mnemonic";
 
 import * as zh_CN from "../wordlist/chinese_simplified.json";
 import * as zh_TW from "../wordlist/chinese_traditional.json";
@@ -21,85 +19,23 @@ import * as japanese from "../wordlist/japanese.json";
 import * as korean from "../wordlist/korean.json";
 import * as spanish from "../wordlist/spanish.json";
 
-const wordList = {
-  english,
-  french,
-  italian,
-  japanese,
-  korean,
-  spanish,
-  zh_CN,
-  zh_TW,
-};
-
-// checksum
-// CS = ENT / 32
-// mnemonic sentence
-// MS = (ENT + CS) / 11
-// ENT = entropy
-
-// |  ENT  | CS | ENT+CS |  MS  |
-// +-------+----+--------+------+
-// |  128  |  4 |   132  |  12  |
-// |  160  |  5 |   165  |  15  |
-// |  192  |  6 |   198  |  18  |
-// |  224  |  7 |   231  |  21  |
-// |  256  |  8 |   264  |  24  |
-
-interface IBip39 {
-  [index: number]: {
-    cs: number;
-    ent: number;
-  };
-}
-
-const mnemonicLength: IBip39 = {
-  12: {
-    cs: 4,
-    ent: 128,
-  },
-  15: {
-    cs: 5,
-    ent: 160,
-  },
-  18: {
-    cs: 7,
-    ent: 192,
-  },
-  21: {
-    cs: 5,
-    ent: 224,
-  },
-  24: {
-    cs: 8,
-    ent: 256,
-  },
-};
-
 const getMnemonic = (
   lang: string = language.english,
-  len: number = 12,
+  len: number = 12
 ): string => {
+  if (len % 3 !== 0 || len < 12) {
+    throw new Error("The mnemonic length should be % 3 is equal with 0");
+  }
+
   const m = mnemonicLength[len];
   const entropy: Buffer = randomBytes(m.ent);
   const words: string[] = wordList[lang];
-  const checksum: Buffer = createHash("sha256")
-    .update(entropy)
-    .digest()
-    .slice(0, 1);
+  const checksum: Buffer = sha256(entropy).slice(0, 1);
 
-  const seed: string = Array.from(Buffer.concat([entropy, checksum]))
-    .map((v) => {
-      let tmp = v.toString(2);
-      if (tmp.length < 8) {
-        const repeat = 8 - tmp.length;
-        const add = "0".repeat(repeat);
-        tmp = add + tmp;
-      }
-      return tmp;
-    })
-    .join("")
-    .slice(0, m.ent + m.cs);
+  const seed: string = bufToBinary(Buffer.concat([entropy, checksum])).slice(
+    0,
+    m.ent + m.cs
+  );
 
   const seedGroup = seed.match(/(.{11})/g);
   const res: string[] = [];
@@ -112,15 +48,6 @@ const getMnemonic = (
   return lang === "japanese" ? res.join("\u3000") : res.join(" ");
 };
 
-const toUtf8 = (data: string): Buffer => {
-  const nor: string = data.normalize("NFKD");
-  return Buffer.from(nor, "utf8");
-};
-
-const pbkdf2 = (password: Buffer, salt: Buffer) => {
-  return pbkdf2Sync(password, salt, 2048, 64, "sha512");
-};
-
 const toSeed = (mnemonic: string, salt: string = "") => {
   const m = toUtf8(mnemonic);
   const s = toUtf8("mnemonic" + salt);
@@ -129,6 +56,54 @@ const toSeed = (mnemonic: string, salt: string = "") => {
 
 const toSeedHex = (mnemonic: string, salt?: string): string => {
   return toSeed(mnemonic, salt).toString("hex");
+};
+
+const validateMnemonic = (
+  mnemonic: string,
+  type: string = language.english
+): boolean => {
+  const m: string[] = mnemonic.normalize("NFKD").split(" ");
+
+  if (m.length % 3 !== 0) {
+    return false;
+  }
+
+  const list: string[] = wordList[type];
+  const tmp: string[] = [];
+
+  m.forEach(v => {
+    const index: number = list.indexOf(v);
+    if (index === -1) {
+      return false;
+    }
+    tmp.push(padding(index.toString(2), 11));
+  });
+
+  const bits: string = tmp.join("");
+
+  const dividerIndex = Math.floor(bits.length / 33) * 32;
+  const entropyBits = bits.slice(0, dividerIndex);
+  const checksumBits = bits.slice(dividerIndex);
+
+  const entropyBytes = entropyBits
+    .match(/(.{8})/g)
+    .map(v => Number.parseInt(v, 2));
+
+  if (
+    entropyBits.length < 16 ||
+    entropyBits.length > 32 ||
+    entropyBits.length % 4 !== 0
+  ) {
+    return false;
+  }
+
+  const entropy = Buffer.from(entropyBits);
+
+  if (getCheckSum(entropy, mnemonicLength[m.length].cs) !== checksumBits) {
+    return false;
+  }
+
+  return true;
 };
 
 export { toSeed, toSeedHex, language, getMnemonic };

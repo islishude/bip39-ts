@@ -4,5 +4,6 @@
         "dtslint",
         "promisify",
         "wordlist"
-    ]
+    ],
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
