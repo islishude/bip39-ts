@@ -10,5 +10,5 @@
     "alwaysStrict": true
   },
   "include": ["src/**/*", "defined/*.d.ts"],
-  "exclude": ["node_modules", "src/test/*.ts"]
+  "exclude": ["node_modules"]
 }

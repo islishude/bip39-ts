@@ -17,7 +17,7 @@
     "build": "rm -rf dist types && tsc",
     "wordlist": "cd wordlist && ts-node update.ts",
     "lint": "tslint src/**/*",
-    "test": "npm run lint && ts-node src/test/*",
+    "test": "npm run lint && ts-node test/*",
     "pub": "git push --all && git push --tags && npm publish"
   },
   "repository": {
