@@ -64,3 +64,4 @@ const validateMnemonic = (mnemonic, type = mnemonic_1.language.english) => {
     }
     return true;
 };
+exports.validateMnemonic = validateMnemonic;

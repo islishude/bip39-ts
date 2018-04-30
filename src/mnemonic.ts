@@ -50,7 +50,7 @@ export interface IBip39 {
   };
 }
 
-export const mnemonicLength: IBip39 = {
+export const mLen: IBip39 = {
   12: {
     cs: 4,
     ent: 128

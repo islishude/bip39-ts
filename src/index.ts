@@ -8,7 +8,7 @@ import {
   sha256,
   toUtf8
 } from "./helper";
-import { language, mnemonicLength, wordList } from "./mnemonic";
+import { language, mLen, wordList } from "./mnemonic";
 
 import * as zh_CN from "../wordlist/chinese_simplified.json";
 import * as zh_TW from "../wordlist/chinese_traditional.json";
@@ -19,6 +19,8 @@ import * as japanese from "../wordlist/japanese.json";
 import * as korean from "../wordlist/korean.json";
 import * as spanish from "../wordlist/spanish.json";
 
+const log = console.log;
+
 const getMnemonic = (
   lang: string = language.english,
   len: number = 12
@@ -27,15 +29,12 @@ const getMnemonic = (
     throw new Error("The mnemonic length should be % 3 is equal with 0");
   }
 
-  const m = mnemonicLength[len];
-  const entropy: Buffer = randomBytes(m.ent);
+  const m = mLen[len];
+  const entropy: Buffer = randomBytes(m.ent / 8);
   const words: string[] = wordList[lang];
-  const checksum: Buffer = sha256(entropy).slice(0, 1);
 
-  const seed: string = bufToBinary(Buffer.concat([entropy, checksum])).slice(
-    0,
-    m.ent + m.cs
-  );
+  const checksum: string = getCheckSum(entropy, m.cs);
+  const seed: string = bufToBinary(entropy) + checksum;
 
   const seedGroup = seed.match(/(.{11})/g);
   const res: string[] = [];
@@ -90,20 +89,20 @@ const validateMnemonic = (
     .map(v => Number.parseInt(v, 2));
 
   if (
-    entropyBits.length < 16 ||
-    entropyBits.length > 32 ||
-    entropyBits.length % 4 !== 0
+    entropyBytes.length < 16 ||
+    entropyBytes.length > 32 ||
+    entropyBytes.length % 4 !== 0
   ) {
     return false;
   }
 
-  const entropy = Buffer.from(entropyBits);
-
-  if (getCheckSum(entropy, mnemonicLength[m.length].cs) !== checksumBits) {
+  const entropy = Buffer.from(entropyBytes);
+  const thisCheck = getCheckSum(entropy, mLen[m.length].cs);
+  if (thisCheck !== checksumBits) {
     return false;
   }
 
   return true;
 };
 
-export { toSeed, toSeedHex, language, getMnemonic };
+export { toSeed, toSeedHex, language, getMnemonic, validateMnemonic };
