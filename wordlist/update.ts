@@ -2,6 +2,7 @@ import axios from "axios";
 import { writeFile } from "fs";
 import { promisify } from "util";
 const write = promisify(writeFile);
+const log = console.log
 
 async function getWordsList() {
   const url: string =
@@ -38,5 +39,4 @@ async function getWordsList() {
   }
 }
 
-/* tslint:disable */
-getWordsList().catch(err => console.log(err.message));
+getWordsList().catch(err => log(err.message));
