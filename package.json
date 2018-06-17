@@ -1,13 +1,12 @@
 {
   "name": "bip39-ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "bip39 implementation by TypeScript for Node.js",
   "main": "dist/src/index.js",
   "types": "types/src/index.d.ts",
-  "dependencies": {
-    "axios": "^0.18.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "axios": "^0.18.0",
     "@types/node": "^9.6.6",
     "ts-node": "^6.1.1",
     "tslint": "^5.9.1",
