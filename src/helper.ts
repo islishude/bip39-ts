@@ -1,5 +1,5 @@
 import { pbkdf2Sync } from "crypto";
-import { createHash, randomBytes } from "crypto";
+import { createHash } from "crypto";
 
 export const padding = (
   data: string,

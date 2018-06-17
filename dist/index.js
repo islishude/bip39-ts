@@ -8,11 +8,11 @@ const getMnemonic = (lang = mnemonic_1.language.english, len = 12) => {
     if (len % 3 !== 0 || len < 12) {
         throw new Error("The mnemonic length should be % 3 is equal with 0");
     }
-    const m = mnemonic_1.mnemonicLength[len];
-    const entropy = crypto_1.randomBytes(m.ent);
+    const m = mnemonic_1.mLen[len];
+    const entropy = crypto_1.randomBytes(m.ent / 8);
     const words = mnemonic_1.wordList[lang];
-    const checksum = helper_1.sha256(entropy).slice(0, 1);
-    const seed = helper_1.bufToBinary(Buffer.concat([entropy, checksum])).slice(0, m.ent + m.cs);
+    const checksum = helper_1.getCheckSum(entropy, m.cs);
+    const seed = helper_1.bufToBinary(entropy) + checksum;
     const seedGroup = seed.match(/(.{11})/g);
     const res = [];
     for (const wordIndex of seedGroup) {
@@ -53,13 +53,14 @@ const validateMnemonic = (mnemonic, type = mnemonic_1.language.english) => {
     const entropyBytes = entropyBits
         .match(/(.{8})/g)
         .map(v => Number.parseInt(v, 2));
-    if (entropyBits.length < 16 ||
-        entropyBits.length > 32 ||
-        entropyBits.length % 4 !== 0) {
+    if (entropyBytes.length < 16 ||
+        entropyBytes.length > 32 ||
+        entropyBytes.length % 4 !== 0) {
         return false;
     }
-    const entropy = Buffer.from(entropyBits);
-    if (helper_1.getCheckSum(entropy, mnemonic_1.mnemonicLength[m.length].cs) !== checksumBits) {
+    const entropy = Buffer.from(entropyBytes);
+    const thisCheck = helper_1.getCheckSum(entropy, mnemonic_1.mLen[m.length].cs);
+    if (thisCheck !== checksumBits) {
         return false;
     }
     return true;

@@ -1,25 +1,12 @@
-import { pbkdf2Sync } from "crypto";
-import { createHash, randomBytes } from "crypto";
+import { randomBytes } from "crypto";
 import {
   bufToBinary,
   getCheckSum,
   padding,
   pbkdf2,
-  sha256,
   toUtf8
 } from "./helper";
 import { language, mLen, wordList } from "./mnemonic";
-
-import * as zh_CN from "../wordlist/chinese_simplified.json";
-import * as zh_TW from "../wordlist/chinese_traditional.json";
-import * as english from "../wordlist/english.json";
-import * as french from "../wordlist/french.json";
-import * as italian from "../wordlist/italian.json";
-import * as japanese from "../wordlist/japanese.json";
-import * as korean from "../wordlist/korean.json";
-import * as spanish from "../wordlist/spanish.json";
-
-const log = console.log;
 
 const getMnemonic = (
   lang: string = language.english,

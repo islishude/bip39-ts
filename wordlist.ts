@@ -1,8 +1,8 @@
 import axios from "axios";
+import { log } from "console";
 import { writeFile } from "fs";
 import { promisify } from "util";
 const write = promisify(writeFile);
-const log = console.log
 
 async function getWordsList() {
   const url: string =
@@ -16,7 +16,7 @@ async function getWordsList() {
     "italian",
     "japanese",
     "korean",
-    "spanish",
+    "spanish"
   ];
 
   const getter: Array<{ type: string; url: string }> = [];
@@ -25,17 +25,21 @@ async function getWordsList() {
     getter.push({ type: word, url: `${url}${word}.txt` });
   }
 
-  const res = getter.map(async (v) => {
+  const res = getter.map(async v => {
     const tmp = await axios.get(v.url);
     return {
       data: tmp.data as string,
-      type: v.type,
+      type: v.type
     };
   });
 
   for (const i of res) {
     const { type, data } = await i;
-    await write(`./${type}.json`, JSON.stringify(data.split("\n")));
+    await write(
+      `src/wordlist/${type}.json`,
+      JSON.stringify(data.split("\n")),
+      { flag: "w" }
+    );
   }
 }
 

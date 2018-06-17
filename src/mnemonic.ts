@@ -9,14 +9,14 @@ export const language = {
   zh_TW: "zh_TW"
 };
 
-import * as zh_CN from "../wordlist/chinese_simplified.json";
-import * as zh_TW from "../wordlist/chinese_traditional.json";
-import * as english from "../wordlist/english.json";
-import * as french from "../wordlist/french.json";
-import * as italian from "../wordlist/italian.json";
-import * as japanese from "../wordlist/japanese.json";
-import * as korean from "../wordlist/korean.json";
-import * as spanish from "../wordlist/spanish.json";
+import zh_CN from "./wordlist/chinese_simplified.json";
+import zh_TW from "./wordlist/chinese_traditional.json";
+import english from "./wordlist/english.json";
+import french from "./wordlist/french.json";
+import italian from "./wordlist/italian.json";
+import japanese from "./wordlist/japanese.json";
+import korean from "./wordlist/korean.json";
+import spanish from "./wordlist/spanish.json";
 
 export const wordList = {
   english,

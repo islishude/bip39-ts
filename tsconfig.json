@@ -7,8 +7,10 @@
     "declaration": true,
     "declarationDir": "types",
     "removeComments": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
-  "include": ["src/**/*", "defined/*.d.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
