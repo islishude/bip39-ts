@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { language } from "./mnemonic";
-declare const getMnemonic: (lang?: string, len?: number) => string;
-declare const toSeed: (mnemonic: string, salt?: string) => Buffer;
-declare const toSeedHex: (mnemonic: string, salt?: string) => string;
-declare const validateMnemonic: (mnemonic: string, type?: string) => boolean;
-export { toSeed, toSeedHex, language, getMnemonic, validateMnemonic };
+export { language };
+export declare const getMnemonic: (lang?: string, len?: number) => string;
+export declare const validateMnemonic: (mnemonic: string, type?: string) => boolean;
+export declare const toSeed: (mnemonic: string, salt?: string) => Buffer;
+export declare const toSeedHex: (mnemonic: string, salt?: string) => string;

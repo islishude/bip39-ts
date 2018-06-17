@@ -1,14 +1,9 @@
 import { randomBytes } from "crypto";
-import {
-  bufToBinary,
-  getCheckSum,
-  padding,
-  pbkdf2,
-  toUtf8
-} from "./helper";
+import { bufToBinary, getCheckSum, padding, pbkdf2, toUtf8 } from "./helper";
 import { language, mLen, wordList } from "./mnemonic";
+export { language };
 
-const getMnemonic = (
+export const getMnemonic = (
   lang: string = language.english,
   len: number = 12
 ): string => {
@@ -31,20 +26,10 @@ const getMnemonic = (
     res.push(words[index]);
   }
 
-  return lang === "japanese" ? res.join("\u3000") : res.join(" ");
+  return res.join(" ");
 };
 
-const toSeed = (mnemonic: string, salt: string = "") => {
-  const m = toUtf8(mnemonic);
-  const s = toUtf8("mnemonic" + salt);
-  return pbkdf2(m, s);
-};
-
-const toSeedHex = (mnemonic: string, salt?: string): string => {
-  return toSeed(mnemonic, salt).toString("hex");
-};
-
-const validateMnemonic = (
+export const validateMnemonic = (
   mnemonic: string,
   type: string = language.english
 ): boolean => {
@@ -92,4 +77,12 @@ const validateMnemonic = (
   return true;
 };
 
-export { toSeed, toSeedHex, language, getMnemonic, validateMnemonic };
+export const toSeed = (mnemonic: string, salt: string = ""): Buffer => {
+  const m = toUtf8(mnemonic);
+  const s = toUtf8("mnemonic" + salt);
+  return pbkdf2(m, s);
+};
+
+export const toSeedHex = (mnemonic: string, salt?: string): string => {
+  return toSeed(mnemonic, salt).toString("hex");
+};

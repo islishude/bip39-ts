@@ -4,7 +4,7 @@ const crypto_1 = require("crypto");
 const helper_1 = require("./helper");
 const mnemonic_1 = require("./mnemonic");
 exports.language = mnemonic_1.language;
-const getMnemonic = (lang = mnemonic_1.language.english, len = 12) => {
+exports.getMnemonic = (lang = mnemonic_1.language.english, len = 12) => {
     if (len % 3 !== 0 || len < 12) {
         throw new Error("The mnemonic length should be % 3 is equal with 0");
     }
@@ -19,20 +19,9 @@ const getMnemonic = (lang = mnemonic_1.language.english, len = 12) => {
         const index = Number.parseInt(wordIndex, 2);
         res.push(words[index]);
     }
-    return lang === "japanese" ? res.join("\u3000") : res.join(" ");
+    return res.join(" ");
 };
-exports.getMnemonic = getMnemonic;
-const toSeed = (mnemonic, salt = "") => {
-    const m = helper_1.toUtf8(mnemonic);
-    const s = helper_1.toUtf8("mnemonic" + salt);
-    return helper_1.pbkdf2(m, s);
-};
-exports.toSeed = toSeed;
-const toSeedHex = (mnemonic, salt) => {
-    return toSeed(mnemonic, salt).toString("hex");
-};
-exports.toSeedHex = toSeedHex;
-const validateMnemonic = (mnemonic, type = mnemonic_1.language.english) => {
+exports.validateMnemonic = (mnemonic, type = mnemonic_1.language.english) => {
     const m = mnemonic.normalize("NFKD").split(" ");
     if (m.length % 3 !== 0) {
         return false;
@@ -65,4 +54,11 @@ const validateMnemonic = (mnemonic, type = mnemonic_1.language.english) => {
     }
     return true;
 };
-exports.validateMnemonic = validateMnemonic;
+exports.toSeed = (mnemonic, salt = "") => {
+    const m = helper_1.toUtf8(mnemonic);
+    const s = helper_1.toUtf8("mnemonic" + salt);
+    return helper_1.pbkdf2(m, s);
+};
+exports.toSeedHex = (mnemonic, salt) => {
+    return exports.toSeed(mnemonic, salt).toString("hex");
+};

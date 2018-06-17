@@ -1,6 +1,6 @@
 {
   "name": "bip39-ts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "bip39 implementation by TypeScript for Node.js",
   "main": "dist/src/index.js",
   "types": "types/src/index.d.ts",
@@ -16,8 +16,8 @@
   "scripts": {
     "build": "rm -rf dist types && tsc",
     "wordlist": "ts-node wordlist.ts",
-    "lint": "tslint src/**/*",
-    "test": "npm run lint && ts-node test/*",
+    "lint": "tslint src/**/*.ts",
+    "test": "npm run lint && ts-node test/*.spec.ts",
     "pub": "git push --all && git push --tags && npm publish"
   },
   "repository": {
