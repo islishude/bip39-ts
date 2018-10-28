@@ -2,8 +2,8 @@
   "name": "bip39-ts",
   "version": "1.0.3",
   "description": "bip39 implementation by TypeScript for Node.js",
-  "main": "dist/src/index.js",
-  "types": "types/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "axios": "^0.18.0",
