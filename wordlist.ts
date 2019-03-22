@@ -35,11 +35,9 @@ async function getWordsList() {
 
   for (const i of res) {
     const { type, data } = await i;
-    await write(
-      `src/wordlist/${type}.json`,
-      JSON.stringify(data.split("\n")),
-      { flag: "w" }
-    );
+    await write(`src/wordlist/${type}.json`, JSON.stringify(data.split("\n")), {
+      flag: "w"
+    });
   }
 }
 

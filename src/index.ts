@@ -5,10 +5,10 @@ export { language };
 
 export const getMnemonic = (
   lang: string = language.english,
-  len: number = 12
+  len: 12 | 15 | 18 | 21 | 24 = 12
 ): string => {
-  if (len % 3 !== 0 || len < 12) {
-    throw new Error("The mnemonic length should be % 3 is equal with 0");
+  if (len % 3 !== 0 || len < 12 || len > 24) {
+    throw new Error("Invalid mnemonic length provied");
   }
 
   const m = mLen[len];

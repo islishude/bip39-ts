@@ -5,8 +5,8 @@ const helper_1 = require("./helper");
 const mnemonic_1 = require("./mnemonic");
 exports.language = mnemonic_1.language;
 exports.getMnemonic = (lang = mnemonic_1.language.english, len = 12) => {
-    if (len % 3 !== 0 || len < 12) {
-        throw new Error("The mnemonic length should be % 3 is equal with 0");
+    if (len % 3 !== 0 || len < 12 || len > 24) {
+        throw new Error("Invalid mnemonic length provied");
     }
     const m = mnemonic_1.mLen[len];
     const entropy = crypto_1.randomBytes(m.ent / 8);

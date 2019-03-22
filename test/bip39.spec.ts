@@ -6,7 +6,7 @@ import {
 } from "../src/index";
 
 for (const lang of Object.keys(language)) {
-  const tmp = getMnemonic(lang);
+  const tmp = getMnemonic(lang, 12);
   console.assert(validateMnemonic(tmp, lang));
 }
 

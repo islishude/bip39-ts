@@ -20,7 +20,7 @@ export const sha256 = (data: Buffer): Buffer => {
     .digest();
 };
 
-export const getCheckSum = (buf: Buffer, max): string => {
+export const getCheckSum = (buf: Buffer, max: number): string => {
   const tmp: Buffer = sha256(buf).slice(0, 1);
   return bufToBinary(tmp).slice(0, max);
 };
