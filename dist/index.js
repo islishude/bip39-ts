@@ -19,10 +19,10 @@ exports.getMnemonic = (lang = mnemonic_1.language.english, len = 12) => {
         const index = Number.parseInt(wordIndex, 2);
         res.push(words[index]);
     }
-    return res.join(" ");
+    return lang === mnemonic_1.language.japanese ? res.join("\u3000") : res.join("\x20");
 };
 exports.validateMnemonic = (mnemonic, type = mnemonic_1.language.english) => {
-    const m = mnemonic.normalize("NFKD").split(" ");
+    const m = mnemonic.normalize("NFKD").split("\x20");
     if (m.length % 3 !== 0) {
         return false;
     }

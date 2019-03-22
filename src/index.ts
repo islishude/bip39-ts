@@ -26,14 +26,14 @@ export const getMnemonic = (
     res.push(words[index]);
   }
 
-  return res.join(" ");
+  return lang === language.japanese ? res.join("\u3000") : res.join("\x20");
 };
 
 export const validateMnemonic = (
   mnemonic: string,
   type: string = language.english
 ): boolean => {
-  const m: string[] = mnemonic.normalize("NFKD").split(" ");
+  const m: string[] = mnemonic.normalize("NFKD").split("\x20");
 
   if (m.length % 3 !== 0) {
     return false;
