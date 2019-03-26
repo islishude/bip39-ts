@@ -1,4 +1,4 @@
-bip39 implementation by TypeScript for Node.js
+bip39 implementation by TypeScript for Node.js [![Build Status](https://travis-ci.org/islishude/bip39.svg?branch=master)](https://travis-ci.org/islishude/bip39)
 
 ## Useage
 
