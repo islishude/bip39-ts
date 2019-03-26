@@ -1,9 +1,4 @@
-import {
-  getMnemonic,
-  language,
-  toSeedHex,
-  validateMnemonic
-} from "../src/index";
+import { getMnemonic, language, toSeedHex, validateMnemonic } from "..";
 
 for (const lang of Object.keys(language)) {
   const tmp = getMnemonic(lang, 12);

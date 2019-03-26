@@ -35,20 +35,20 @@ export const validateMnemonic = (
 ): boolean => {
   const m: string[] = mnemonic.normalize("NFKD").split("\x20");
 
-  if (m.length % 3 !== 0) {
+  if (m.length < 12 || m.length > 24 || m.length % 3 !== 0) {
     return false;
   }
 
   const list: string[] = wordList[type];
   const tmp: string[] = [];
 
-  m.forEach(v => {
+  for (const v of m) {
     const index: number = list.indexOf(v);
     if (index === -1) {
       return false;
     }
     tmp.push(padding(index.toString(2), 11));
-  });
+  }
 
   const bits: string = tmp.join("");
 
@@ -68,13 +68,8 @@ export const validateMnemonic = (
     return false;
   }
 
-  const entropy = Buffer.from(entropyBytes);
-  const thisCheck = getCheckSum(entropy, mLen[m.length].cs);
-  if (thisCheck !== checksumBits) {
-    return false;
-  }
-
-  return true;
+  const thisCheck = getCheckSum(Buffer.from(entropyBytes), mLen[m.length].cs);
+  return thisCheck === checksumBits;
 };
 
 export const toSeed = (mnemonic: string, salt: string = ""): Buffer => {
