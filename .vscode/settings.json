@@ -1,9 +1,0 @@
-{
-    "cSpell.words": [
-        "dist",
-        "dtslint",
-        "promisify",
-        "wordlist"
-    ],
-    "typescript.tsdk": "node_modules/typescript/lib"
-}

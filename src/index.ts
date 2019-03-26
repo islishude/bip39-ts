@@ -1,21 +1,15 @@
 import { randomBytes } from "crypto";
 import { bufToBinary, getCheckSum, padding, pbkdf2, toUtf8 } from "./helper";
-import { language, mLen, wordList } from "./mnemonic";
+import { language, wordList } from "./mnemonic";
 export { language };
 
-export const getMnemonic = (
-  lang: string = language.english,
-  len: 12 | 15 | 18 | 21 | 24 = 12
+const entropyToMnemonic = (
+  entropy: Buffer,
+  lang: string,
+  csBitsLen: number
 ): string => {
-  if (len % 3 !== 0 || len < 12 || len > 24) {
-    throw new Error("Invalid mnemonic length provied");
-  }
-
-  const m = mLen[len];
-  const entropy: Buffer = randomBytes(m.ent / 8);
   const words: string[] = wordList[lang];
-
-  const checksum: string = getCheckSum(entropy, m.cs);
+  const checksum: string = getCheckSum(entropy, csBitsLen);
   const seed: string = bufToBinary(entropy) + checksum;
 
   const seedGroup = seed.match(/(.{11})/g);
@@ -29,20 +23,51 @@ export const getMnemonic = (
   return lang === language.japanese ? res.join("\u3000") : res.join("\x20");
 };
 
+export const getMnemonic = (
+  wordLen: 12 | 15 | 18 | 21 | 24 = 12,
+  lang: string = language.english
+): string => {
+  if (wordLen % 3 !== 0 || wordLen < 12 || wordLen > 24) {
+    throw new Error("Invalid mnemonic length provied");
+  }
+
+  const entropy: Buffer = randomBytes(wordLen + wordLen / 3);
+  return entropyToMnemonic(entropy, lang, wordLen / 3);
+};
+
+export const getMnemonicByEntropy = (
+  entropy: string | Buffer,
+  lang: string = language.english
+): string => {
+  if (typeof entropy === "string") {
+    entropy = Buffer.from(entropy, "hex");
+  }
+
+  if (entropy.length < 16 || entropy.length > 32 || entropy.length % 4 !== 0) {
+    throw new Error("Invalid entropy length");
+  }
+
+  return entropyToMnemonic(entropy, lang, (entropy.length / 4) * 3);
+};
+
 export const validateMnemonic = (
   mnemonic: string,
-  type: string = language.english
+  lang: string = language.english
 ): boolean => {
-  const m: string[] = mnemonic.normalize("NFKD").split("\x20");
+  const wrodArray: string[] = mnemonic.normalize("NFKD").split("\x20");
 
-  if (m.length < 12 || m.length > 24 || m.length % 3 !== 0) {
+  if (
+    wrodArray.length < 12 ||
+    wrodArray.length > 24 ||
+    wrodArray.length % 3 !== 0
+  ) {
     return false;
   }
 
-  const list: string[] = wordList[type];
+  const list: string[] = wordList[lang];
   const tmp: string[] = [];
 
-  for (const v of m) {
+  for (const v of wrodArray) {
     const index: number = list.indexOf(v);
     if (index === -1) {
       return false;
@@ -68,7 +93,10 @@ export const validateMnemonic = (
     return false;
   }
 
-  const thisCheck = getCheckSum(Buffer.from(entropyBytes), mLen[m.length].cs);
+  const thisCheck = getCheckSum(
+    Buffer.from(entropyBytes),
+    wrodArray.length / 3
+  );
   return thisCheck === checksumBits;
 };
 
