@@ -1,34 +1,44 @@
 {
   "name": "bip39-ts",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "bip39 implementation by TypeScript for Node.js",
-  "main": "dist/index.js",
-  "types": "types/index.d.ts",
+  "main": "dist",
+  "types": "dist",
+  "files": [
+    "dist"
+  ],
   "dependencies": {},
   "devDependencies": {
-    "axios": "^0.18.0",
     "@types/node": "^9.6.6",
+    "axios": "^0.18.0",
+    "del-cli": "^1.1.0",
     "ts-node": "^6.1.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.12.0",
     "typescript": "^2.9.2"
   },
   "scripts": {
-    "build": "rm -rf dist types && tsc",
+    "build": "del-cli dist && npm run lint && tsc",
     "wordlist": "ts-node wordlist.ts",
     "lint": "tslint src/**/*.ts",
-    "test": "npm run lint && ts-node test/*.spec.ts",
-    "pub": "git push --all && git push --tags && npm publish"
+    "test": "ts-node test/*.spec.ts",
+    "prerelease": "npm run build && npm test",
+    "release": "git push --all && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cryptocoin-ts/bip39.git"
+    "url": "git+https://github.com/islishude/bip39.git"
   },
-  "keywords": [],
+  "keywords": [
+    "bitcoin",
+    "bip39",
+    "mnemonic",
+    "typescript"
+  ],
   "author": "lishude <lishude@aliyun.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cryptocoin-ts/bip39/issues"
+    "url": "https://github.com/islishude/bip39/issues"
   },
-  "homepage": "https://github.com/cryptocoin-ts/bip39#readme"
+  "homepage": "https://github.com/islishude/bip39#readme"
 }
